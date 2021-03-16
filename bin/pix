@@ -1,0 +1,82 @@
+#!/bin/bash
+
+read -rd '' USAGE << EOF
+usage: pix [OPTIONS] COMMAND [-- ARGS]
+
+  COMMAND will be run on each host, ARGS will be split
+  between hosts and passed in one at a time
+
+example:
+
+  $ pix uname -n -- -r -v -m -o
+  pi4: pi4 GNU/Linux
+  pi2: pi2 #1333 SMP Mon Aug 10 16:51:40 BST 2020
+  pi3: pi3 armv7l
+  pi1: pi1 5.4.51-v7l+
+
+options:
+  -h, --help  print a brief help message and exit
+EOF
+
+HOSTS=(pi1 pi2 pi3 pi4)
+
+function prepend_stdout()
+{
+    while read -r line; do
+        echo "$1: $line"
+    done
+}
+
+function prepend_stderr()
+{
+    while read -r line; do
+        echo "$1: $line" 1>&2
+    done
+}
+
+[[ -z $1 ]] && echo "$USAGE" && exit 1
+
+cmd=()  # everything up to the --
+while [[ -n $1 ]] ; do
+    case $1 in
+	--) break
+	    ;;
+    -h|--help)
+        echo "$USAGE"
+        exit 0
+        ;;
+	*) cmd+=("$1")
+	    ;;
+    esac
+    shift
+done
+shift
+
+args=()  # everything after the --
+while [[ -n $1 ]] ; do
+    args+=("$1")
+    shift
+done
+
+pids=()
+if [[ "${#args[@]}" = 0 ]] ; then
+    for host in "${HOSTS[@]}"; do
+        # shellcheck disable=SC2029
+        ssh "$host" "${cmd[@]}" 1> >(prepend_stdout "$host") 2> >(prepend_stderr "$host") &
+        pids+=("$!")
+    done
+else
+    i=0
+    for arg in "${args[@]}"; do
+        host="${HOSTS[$i]}"
+        # shellcheck disable=SC2029
+        ssh "$host" "${cmd[@]}" "$arg" 1> >(prepend_stdout "$host") 2> >(prepend_stderr "$host") &
+        pids+=("$!")
+        i=$(( (i + 1) % ${#HOSTS[@]} ))
+    done
+fi
+
+# wait for all pids
+for pid in "${pids[@]}"; do
+    wait "$pid"
+done

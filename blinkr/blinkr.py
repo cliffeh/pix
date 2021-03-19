@@ -1,6 +1,8 @@
 from flask import Flask, abort, jsonify, render_template, request
 from functools import wraps
 
+PIS=['pi1','pi2','pi3','pi4']  # TODO externalize into config
+
 app = Flask(__name__)
 
 HAS_BLINKT = False
@@ -12,10 +14,9 @@ except (ImportError, RuntimeError):
 
 @app.route('/')
 def index():
-    pis = request.args.get('pis', '')
-    return render_template('index.html', pis=pis.split(','))
+    return render_template('index.html', pis=PIS)
 
-### routes that require blinkt ###
+### routes that require blinkt locally ###
 
 def blinkt_required(f):
     @wraps(f)

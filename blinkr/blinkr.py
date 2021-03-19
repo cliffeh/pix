@@ -39,6 +39,7 @@ def capabilities():
 def all_pixels():
     if request.method == 'POST':
         blinkt.set_all(0, 0, 0)
+        blinkt.show()
     r = []
     for i in range(0, blinkt.NUM_PIXELS):
         r.append(blinkt.get_pixel(i)[:3])

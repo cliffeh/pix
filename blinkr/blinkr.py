@@ -39,5 +39,5 @@ def capabilities():
 def get_pixels():
     r = []
     for i in range(0, blinkt.NUM_PIXELS):
-        r.append(blinkt.get_pixel(i)[:2])
+        r.append(blinkt.get_pixel(i)[:3])
     return jsonify(r)

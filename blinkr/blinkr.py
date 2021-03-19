@@ -41,3 +41,8 @@ def get_pixels():
     for i in range(0, blinkt.NUM_PIXELS):
         r.append(blinkt.get_pixel(i)[:3])
     return jsonify(r)
+
+@app.route('/pixels/<id>')
+@blinkt_required
+def get_pixel(id=None):
+    return jsonify(blinkt.get_pixel(i)[:3])

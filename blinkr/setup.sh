@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 BLINKR_HOME="$(dirname $0)"
 echo "Using BLINKR_HOME=${BLINKR_HOME}"
 

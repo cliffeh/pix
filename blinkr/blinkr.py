@@ -42,9 +42,12 @@ def get_pixels():
         r.append(blinkt.get_pixel(i)[:3])
     return jsonify(r)
 
-@app.route('/pixels/<int:id>')
+@app.route('/pixels/<int:id>', methods = ['GET', 'POST'])
 @blinkt_required
 def get_pixel(id=None):
+    if request.method == 'POST':
+        blinkt.set_pixel(id, 0, 0, 0)
+        blinkt.show()
     return jsonify(blinkt.get_pixel(id)[:3])
 
 @app.route('/pixels/<int:id>/<int:r>/<int:g>/<int:b>', methods = ['POST'])

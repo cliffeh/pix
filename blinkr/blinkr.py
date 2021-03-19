@@ -45,4 +45,4 @@ def get_pixels():
 @app.route('/pixels/<id>')
 @blinkt_required
 def get_pixel(id=None):
-    return jsonify(blinkt.get_pixel(i)[:3])
+    return jsonify(blinkt.get_pixel(id)[:3])

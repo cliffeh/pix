@@ -21,6 +21,6 @@ def capabilities():
 
     return {
         'blinkt': {
-            'NUM_PIXELS': blinkt.num_pixels
+            'NUM_PIXELS': blinkt.NUM_PIXELS
         }
     }

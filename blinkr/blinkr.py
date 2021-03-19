@@ -34,9 +34,11 @@ def capabilities():
         }
     }
 
-@app.route('/pixels')
+@app.route('/pixels', methods = ['GET', 'POST'])
 @blinkt_required
-def get_pixels():
+def all_pixels():
+    if request.method == 'POST':
+        blinkt.set_all(0, 0, 0)
     r = []
     for i in range(0, blinkt.NUM_PIXELS):
         r.append(blinkt.get_pixel(i)[:3])
@@ -44,7 +46,7 @@ def get_pixels():
 
 @app.route('/pixels/<int:id>', methods = ['GET', 'POST'])
 @blinkt_required
-def get_pixel(id=None):
+def reset_pixel(id=None):
     if request.method == 'POST':
         blinkt.set_pixel(id, 0, 0, 0)
         blinkt.show()

@@ -1,4 +1,5 @@
 from flask import Flask, abort, jsonify, render_template, request
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -14,13 +15,29 @@ def index():
     pis = request.args.get('pis', '')
     return render_template('index.html', pis=pis.split(','))
 
-@app.route('/capabilities')
-def capabilities():
-    if not HAS_BLINKT:
-        return jsonify(error="node does not have blinkt capabilities"), 404
+### routes that require blinkt ###
 
+def blinkt_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not HAS_BLINKT:
+            return jsonify(error="node does not have blinkt capabilities"), 404
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/capabilities')
+@blinkt_required
+def capabilities():
     return {
         'blinkt': {
             'NUM_PIXELS': blinkt.NUM_PIXELS
         }
     }
+
+@app.route('/pixels')
+@blinkt_required
+def get_pixels():
+    r = []
+    for i in range(0, blinkt.NUM_PIXELS):
+        r.append(blinkt.get_pixel(i)[:2])
+    return jsonify(r)

@@ -1,6 +1,8 @@
 ## What's here?
 
-At time of writing, a single bash utility script (`pix`) for running things on all your Raspberry Pi nodes. It assumes that you've built your cluster, set up ssh keys (TODO: HOWTO), and (optionally, if you need to do things as root/some other user) configured sudo. Assuming all of that, usage is straightforward:
+
+### pix
+A bash utility script (`pix`) for running things on all your Raspberry Pi nodes. It assumes that you've built your cluster, set up ssh keys (TODO: HOWTO), and (optionally, if you need to do things as root/some other user) configured sudo. Assuming all of that, usage is straightforward:
 
 ```
 usage: pix [OPTIONS] COMMAND [-- ARGS]
@@ -19,3 +21,6 @@ example:
 options:
   -h, --help  print a brief help message and exit
 ```
+
+### blink-test.py
+Super-simple test script for the [Blinkt!](http://docs.pimoroni.com/blinkt/) Python library. Assuming you have blinkt installed (TODO: HOWTO) this little script will turn each LED green, one at a time.

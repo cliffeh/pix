@@ -78,7 +78,6 @@ function render_color_picker() {
 
 function click_pixel(event, d) {
     const circle = d3.select(this);
-    // TODO color picker instead of all green
     d3.json(`/pis/${d.name}/pixels/${d.pos}/${cc.r}/${cc.g}/${cc.b}`, {method:"POST"})
         .then(rgb => {
             circle.style('fill', `rgb(${rgb[0]},${rgb[1]},${rgb[2]}`);

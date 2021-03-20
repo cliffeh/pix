@@ -21,9 +21,11 @@ def index():
 
 @app.route('/pis')
 def all_pis():
+    r = {}
     for pi in PIS:
-        print(pi)
-    return jsonify(PIS)
+        # TODO handle errors
+        r[pi] = requests.get(f'http://{pi}:{PORT}/pixels').json()
+    return jsonify(r[pi])
 
 ### routes that forward requests on to other pis ###
 

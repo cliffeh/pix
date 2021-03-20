@@ -78,7 +78,16 @@ function render_color_picker() {
 
 function click_pixel(event, d) {
     const circle = d3.select(this);
-    d3.json(`/pis/${d.name}/pixels/${d.pos}/${cc.r}/${cc.g}/${cc.b}`, {method:"POST"})
+    var r = g = b = 0;
+    if(!d.on) {
+        r = cc.r;
+        g = cc.g;
+        b = cc.b;
+        d.on = true;
+    } else {
+        d.on = false;
+    }
+    d3.json(`/pis/${d.name}/pixels/${d.pos}/${r}/${g}/${b}`, {method:"POST"})
         .then(rgb => {
             circle.style('fill', `rgb(${rgb[0]},${rgb[1]},${rgb[2]}`);
         });

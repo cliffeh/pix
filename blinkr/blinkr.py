@@ -23,8 +23,8 @@ def index():
 def all_pis():
     pis = []
     for pi in PIS:
-        # TODO handle errors
         r = requests.get(f'http://{pi}:{PORT}/pixels')
+        # TODO handle errors
         pis.append({ pi: r.json() })
     return jsonify(pis)
 

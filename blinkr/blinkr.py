@@ -1,7 +1,10 @@
 from flask import Flask, abort, jsonify, render_template, request
 from functools import wraps
+import requests
 
-PIS=['pi1','pi2','pi3','pi4']  # TODO externalize into config
+# TODO externalize into config
+PIS=['pi4','pi3','pi2','pi1']
+PORT=5000
 
 app = Flask(__name__)
 
@@ -15,6 +18,30 @@ except (ImportError, RuntimeError):
 @app.route('/')
 def index():
     return render_template('index.html', pis=PIS)
+
+@app.route('/pis')
+def all_pis():
+    for pi in PIS:
+        print(pi)
+    return jsonify(PIS)
+
+### routes that forward requests on to other pis ###
+
+def valid_pi_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if kwargs['pi'] not in PIS:
+            return jsonify(error="node does not support talking to this pi"), 400
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@app.route('/pis/<pi>', methods = ['GET', 'POST'])
+@valid_pi_required
+def get_or_set_pi(pi=None):
+    r = requests.get(f'http://{pi}:{PORT}/pixels')
+    # TODO handle errors
+    return r.json(), r.status_code
 
 ### routes that require blinkt locally ###
 
@@ -48,7 +75,7 @@ def all_pixels():
 
 @app.route('/pixels/<int:id>', methods = ['GET', 'POST'])
 @blinkt_required
-def reset_pixel(id=None):
+def get_or_set_pixel(id=None):
     if request.method == 'POST':
         blinkt.set_pixel(id, 0, 0, 0)
         blinkt.show()

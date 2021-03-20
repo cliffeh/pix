@@ -4,7 +4,7 @@
     <style type="text/css">
         #grid-container {
             display: grid;
-            grid-template-columns: auto auto;
+            grid-template-columns: auto;
             grid-gap: 10px;
             background-color: #2196F3;
             padding: 10px;
@@ -12,22 +12,14 @@
 
         #grid-container > .pi-container {
             background-color: rgba(255, 255, 255, 0.8);
-            text-align: center;
+            
             padding: 20px 0;
             font-size: 30px;
         }
     </style>
 </head>
 <body>
-    <div id="grid-container">
-    {% for pi in pis: %}
-        <div id="{{pi}}-container" class="pi-container">{{pi}}</div>
-    {% endfor %}
-    </div>
-
 <script src="{{ url_for('static', filename='blinkr.js') }}" type="text/javascript"></script>
-<script type="text/javascript">render_pis({{pis | tojson}});</script>
-
-
+<script type="text/javascript">render_pis();</script>
 </body>
 </html>

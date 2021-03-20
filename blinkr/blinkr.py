@@ -17,15 +17,15 @@ except (ImportError, RuntimeError):
 
 @app.route('/')
 def index():
-    return render_template('index.html', pis=PIS)
+    return render_template('index.html')
 
 @app.route('/pis')
 def all_pis():
     pis = []
     for pi in PIS:
         r = requests.get(f'http://{pi}:{PORT}/pixels')
-        # TODO handle errors
-        pis.append({ pi: r.json() })
+        # TODO handle errorsz
+        pis.append({ 'name': pi, 'pixels': r.json() })
     return jsonify(pis)
 
 ### routes that forward requests on to other pis ###

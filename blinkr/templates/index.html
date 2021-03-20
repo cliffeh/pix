@@ -1,20 +1,17 @@
 <html>
 <head>
-	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="https://d3js.org/d3.v6.min.js"></script>
     <style type="text/css">
-        #grid-container {
-            display: grid;
-            grid-template-columns: auto;
-            grid-gap: 10px;
-            background-color: #2196F3;
-            padding: 10px;
+        .wrapper {}
+        .pi-container {
+            display: flex;
+            background-color: lightgreen;
         }
-
-        #grid-container > .pi-container {
-            background-color: rgba(255, 255, 255, 0.8);
-            
-            padding: 20px 0;
-            font-size: 30px;
+        .pi-container > .pi-name {
+            font-size: 36px;
+        }
+        .pixel {
+            stroke: black;
         }
     </style>
 </head>

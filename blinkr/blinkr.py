@@ -24,7 +24,7 @@ def all_pis():
     pis = []
     for pi in PIS:
         r = requests.get(f'http://{pi}:{PORT}/pixels')
-        # TODO handle errorsz
+        # TODO handle errors
         pis.append({ 'name': pi, 'pixels': r.json() })
     return jsonify(pis)
 
@@ -43,6 +43,13 @@ def valid_pi_required(f):
 @valid_pi_required
 def get_or_set_pi(pi=None):
     r = requests.get(f'http://{pi}:{PORT}/pixels')
+    # TODO handle errors
+    return r.text, r.status_code
+
+@app.route('/pis/<pi>/pixels/<int:id>/<int:r>/<int:g>/<int:b>', methods = ['POST'])
+@valid_pi_required
+def get_or_set_pi_pixels(pi=None, id=None, r=None, g=None, b=None):
+    r = requests.post(f'http://{pi}:{PORT}/pixels/{id}/{r}/{g}/{b}')
     # TODO handle errors
     return r.text, r.status_code
 

@@ -21,11 +21,12 @@ def index():
 
 @app.route('/pis')
 def all_pis():
-    r = {}
+    pis = []
     for pi in PIS:
         # TODO handle errors
-        r[pi] = requests.get(f'http://{pi}:{PORT}/pixels').json()
-    return jsonify(r[pi])
+        r = requests.get(f'http://{pi}:{PORT}/pixels')
+        pis.append({ pi: r.json() })
+    return jsonify(pis)
 
 ### routes that forward requests on to other pis ###
 
@@ -54,15 +55,6 @@ def blinkt_required(f):
             return jsonify(error="node does not have blinkt capabilities"), 404
         return f(*args, **kwargs)
     return decorated_function
-
-@app.route('/capabilities')
-@blinkt_required
-def capabilities():
-    return {
-        'blinkt': {
-            'NUM_PIXELS': blinkt.NUM_PIXELS
-        }
-    }
 
 @app.route('/pixels', methods = ['GET', 'POST'])
 @blinkt_required

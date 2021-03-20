@@ -41,7 +41,7 @@ def valid_pi_required(f):
 def get_or_set_pi(pi=None):
     r = requests.get(f'http://{pi}:{PORT}/pixels')
     # TODO handle errors
-    return r.json(), r.status_code
+    return r.text, r.status_code
 
 ### routes that require blinkt locally ###
 

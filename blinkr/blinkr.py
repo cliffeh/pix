@@ -19,6 +19,8 @@ except (ImportError, RuntimeError):
 def index():
     return render_template('index.html')
 
+### routes that forward requests on to other pis ###
+
 @app.route('/pis')
 def all_pis():
     pis = []
@@ -27,8 +29,6 @@ def all_pis():
         # TODO handle errors
         pis.append({ 'name': pi, 'pixels': r.json() })
     return jsonify(pis)
-
-### routes that forward requests on to other pis ###
 
 def valid_pi_required(f):
     @wraps(f)

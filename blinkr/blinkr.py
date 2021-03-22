@@ -38,7 +38,6 @@ def valid_pi_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
 @app.route('/pis/<pi>', methods = ['GET', 'POST'])
 @valid_pi_required
 def get_or_set_pi(pi=None):

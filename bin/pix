@@ -18,7 +18,7 @@ options:
   -h, --help  print a brief help message and exit
 EOF
 
-HOSTS=(pi1 pi2 pi3 pi4)
+HOSTS=(pi1 pi2 pi3 pi4 pi5 pi7)
 
 function prepend_stdout()
 {

@@ -3,11 +3,14 @@
 read -rd '' USAGE << EOF
 usage: pix [OPTIONS] COMMAND [-- ARGS]
 
-  COMMAND will be run on each host, ARGS will be split
-  between hosts and passed in one at a time
+  COMMAND will be run on each host in the PIHOSTS environment variable;
+  ARGS will be split between hosts and passed in one at a time
+
+  PIHOSTS should be a comma-delimited list of hostnames
 
 example:
 
+  $ export PIHOSTS="pi1,pi2,pi3,pi4"
   $ pix uname -n -- -r -v -m -o
   pi4: pi4 GNU/Linux
   pi2: pi2 #1333 SMP Mon Aug 10 16:51:40 BST 2020
@@ -18,7 +21,13 @@ options:
   -h, --help  print a brief help message and exit
 EOF
 
-HOSTS=(pi1 pi2 pi3 pi4 pi5 pi7)
+if [[ -z "${PIHOSTS}" ]] ; then
+    echo "error: PIHOSTS environment variable not set" 1>&2
+    echo "${USAGE}" 1>&2
+    exit 1
+fi
+IFS=',' read -r -a HOSTS <<< "$PIHOSTS"
+unset IFS
 
 function prepend_stdout()
 {

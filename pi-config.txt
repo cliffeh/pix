@@ -1,0 +1,25 @@
+# ssh keys
+mkdir -p ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
+# add your keys!
+
+# packages
+sudo apt update && sudo apt -y upgrade && sudo apt -y install snapd emacs-nox emacs-el
+
+# cgroup config
+sudo cp /boot/firmware/cmdline.txt /boot/firmware/cmdline.txt.orig
+(echo -n 'cgroup_enable=memory cgroup_memory=1 ' && cat /boot/firmware/cmdline.txt) | sudo tee /boot/firmware/cmdline.txt
+cat /boot/firmware/cmdline.txt
+sudo reboot
+
+# install microk8s and add yourself to the group
+sudo snap install microk8s --classic && sudo usermod -a -G microk8s cliff && newgrp microk8s
+
+# check status
+microk8s status
+
+# on pi0, do this and then run the command it spits out on the new node
+# NOTE: USE THE --worker OPTION!
+microk8s.add-node
+
+# check nodes
+microk8s.kubectl get node

@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: flask-hello-world-ingress
   namespace: test
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /hello
 spec:
   tls:
   - hosts:

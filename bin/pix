@@ -55,8 +55,13 @@ while [[ -n $1 ]] ; do
 	--) break
 	    ;;
     -d|--delay)
-        delay=$2
+        if [ -z "$2" ]; then
+            echo "error: $1 requires an argument" 1>&2
+            echo "${USAGE}" 1>&2
+            exit 1
+        fi
         shift # shift the flag, the argument will be shifted below
+        delay=$1
         ;;
     -h|--help)
         echo "$USAGE"

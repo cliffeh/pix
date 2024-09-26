@@ -4,7 +4,8 @@ read -rd '' USAGE << EOF
 usage: pix [OPTIONS] COMMAND [-- ARGS]
 
   COMMAND will be run on each host in the PIHOSTS environment variable;
-  ARGS will be split between hosts and passed in one at a time
+  ARGS coming after the -- will be passed into COMMAND rather than being
+  evaluated by pix itself
 
   PIHOSTS should be a comma-delimited list of hostnames
 
@@ -12,10 +13,10 @@ example:
 
   $ export PIHOSTS="pi1,pi2,pi3,pi4"
   $ pix uname -n -- -r -v -m -o
-  pi4: pi4 GNU/Linux
-  pi2: pi2 #1333 SMP Mon Aug 10 16:51:40 BST 2020
-  pi3: pi3 armv7l
-  pi1: pi1 5.4.51-v7l+
+  pi3: pi3 6.6.47+rpt-rpi-v8 aarch64 GNU/Linux
+  pi2: pi2 6.6.47+rpt-rpi-v8 aarch64 GNU/Linux
+  pi4: pi4 6.6.47+rpt-rpi-v8 aarch64 GNU/Linux
+  pi1: pi1 6.6.47+rpt-rpi-v8 aarch64 GNU/Linux
 
 options:
   -h, --help  print a brief help message and exit
@@ -68,22 +69,13 @@ while [[ -n $1 ]] ; do
 done
 
 pids=()
-if [[ "${#args[@]}" = 0 ]] ; then
-    for host in "${HOSTS[@]}"; do
-        # shellcheck disable=SC2029
-        ssh "$host" "${cmd[@]}" 1> >(prepend_stdout "$host") 2> >(prepend_stderr "$host") &
-        pids+=("$!")
-    done
-else
-    i=0
-    for arg in "${args[@]}"; do
-        host="${HOSTS[$i]}"
-        # shellcheck disable=SC2029
-        ssh "$host" "${cmd[@]}" "$arg" 1> >(prepend_stdout "$host") 2> >(prepend_stderr "$host") &
-        pids+=("$!")
-        i=$(( (i + 1) % ${#HOSTS[@]} ))
-    done
-fi
+
+for host in "${HOSTS[@]}"; do
+    # shellcheck disable=SC2029
+    ssh "$host" "${cmd[@]}" "${args[@]}" 1> >(prepend_stdout "$host") 2> >(prepend_stderr "$host") &
+    pids+=("$!")
+done
+
 
 # wait for all pids
 for pid in "${pids[@]}"; do

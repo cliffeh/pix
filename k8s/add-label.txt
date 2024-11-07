@@ -1,0 +1,9 @@
+# to add a role
+kubectl label nodes pi3 kubernetes.io/role=master
+kubectl label nodes pi6 kubernetes.io/role=master
+kubectl label nodes pi7 kubernetes.io/role=master
+
+kubectl label nodes pi1 kubernetes.io/role=worker
+kubectl label nodes pi2 kubernetes.io/role=worker
+kubectl label nodes pi4 kubernetes.io/role=worker
+kubectl label nodes pi5 kubernetes.io/role=worker

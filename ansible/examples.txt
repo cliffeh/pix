@@ -1,0 +1,8 @@
+# run uname using the default command module
+ansible -i inventory.ini all -a 'uname -a'
+
+# run uname using the default command module (one-line output)
+ansible -o -i inventory.ini all -a 'uname -a'
+
+# run the playbook in uname.yaml
+ansible-playbook -i inventory.ini uname.yaml

@@ -1,0 +1,11 @@
+---
+- name: Gather uname information from target hosts
+  hosts: all
+  tasks:
+    - name: Run uname -a command
+      ansible.builtin.shell: uname -a
+      register: uname_output
+
+    - name: Display uname output
+      debug:
+        msg: "{{ uname_output.stdout }}"

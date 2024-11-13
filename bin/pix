@@ -1,5 +1,8 @@
 #!/bin/bash
 
+ok_color=""
+err_color=""
+end_color=""
 delay=0
 sync=
 
@@ -22,6 +25,7 @@ example:
   pi1: pi1 6.6.47+rpt-rpi-v8 aarch64 GNU/Linux
 
 options:
+  -c, --color    colorize output
   -d, --delay N  delay N seconds between running on each host
   -s, --sync     wait for each host to finish before running on the next one
   -h, --help     print a brief help message and exit
@@ -38,14 +42,14 @@ unset IFS
 function prepend_stdout()
 {
     while read -r line; do
-        echo "$1: $line"
-    done
+        printf "${ok_color}%-12s${line}${end_color}\n" "$1:"
+    done   
 }
 
 function prepend_stderr()
 {
     while read -r line; do
-        echo "$1: $line" 1>&2
+        printf "${err_color}%-12s${line}${end_color}\n" "$1:" 1>&2
     done
 }
 
@@ -56,6 +60,11 @@ while [[ -n $1 ]] ; do
     case $1 in
 	--) break
 	    ;;
+    -c|--color)
+        ok_color="\033[32m"
+        err_color="\033[31m"
+        end_color="\033[0m"
+        ;;
     -d|--delay)
         if [ -z "$2" ]; then
             echo "error: $1 requires an argument" 1>&2

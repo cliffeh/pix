@@ -42,14 +42,14 @@ unset IFS
 function prepend_stdout()
 {
     while read -r line; do
-        printf "${ok_color}%-12s%s${end_color}\n" "$1:" "${line}"
+        printf "${ok_color}%-8s%s${end_color}\n" "$1:" "${line}"
     done   
 }
 
 function prepend_stderr()
 {
     while read -r line; do
-        printf "${err_color}%-12s%s${end_color}\n" "$1:" "${line}" 1>&2
+        printf "${ok_color}%-8s%s${end_color}\n" "$1:" "${line}" 1>&2
     done
 }
 

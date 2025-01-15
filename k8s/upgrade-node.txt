@@ -1,2 +1,7 @@
 # https://microk8s.io/docs/upgrade-cluster
 
+NODE=__SET_NODE_NAME__HERE!
+
+kubectl drain $NODE --ignore-daemonsets --delete-emptydir-data && \
+ssh $NODE sudo snap refresh microk8s --channel=latest/stable && \
+kubectl uncordon $NODE

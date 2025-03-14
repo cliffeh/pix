@@ -17,7 +17,7 @@ usage: pix [OPTIONS] COMMAND [-- ARGS]
 
 example:
 
-  $ export PIHOSTS="pi1,pi2,pi3,pi4"
+  $ export PIHOSTS="pi1 pi2 pi3 pi4"
   $ pix uname -n -- -r -v -m -o
   pi3: pi3 6.6.47+rpt-rpi-v8 aarch64 GNU/Linux
   pi2: pi2 6.6.47+rpt-rpi-v8 aarch64 GNU/Linux
@@ -36,8 +36,7 @@ if [[ -z "${PIHOSTS}" ]] ; then
     echo "${USAGE}" 1>&2
     exit 1
 fi
-IFS=',' read -r -a HOSTS <<< "$PIHOSTS"
-unset IFS
+read -r -a HOSTS <<< "$PIHOSTS"
 
 function prepend_stdout()
 {
@@ -49,7 +48,7 @@ function prepend_stdout()
 function prepend_stderr()
 {
     while read -r line; do
-        printf "${ok_color}%-8s%s${end_color}\n" "$1:" "${line}" 1>&2
+        printf "${err_color}%-8s%s${end_color}\n" "$1:" "${line}" 1>&2
     done
 }
 

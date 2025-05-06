@@ -17,12 +17,10 @@ sudo snap install core && sudo reboot
 # install microk8s and add yourself to the group
 sudo snap install microk8s --classic && sudo usermod -a -G microk8s cliff && sudo reboot
 
-# check status
-/snap/bin/microk8s.status --format short
-
-# on pi0, do this and then run the command it spits out on the new node
-# NOTE: USE THE --worker OPTION!
+# for each node, run this on pi0 and then run the command on another node
+# NB the token will be unique per-node!
 /snap/bin/microk8s.add-node
 
-# check nodes
-/snap/bin/microk8s.kubectl get node
+# check status; if you've added enough nodes, it should show that high availability
+# is enabled and list master/standby datastore nodes
+/snap/bin/microk8s.status

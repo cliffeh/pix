@@ -27,7 +27,7 @@ sudo snap install microk8s --classic && sudo usermod -a -G microk8s cliff && sud
 
 # enable metallb and ingress; note that metallb will ask for an IP range;
 # e.g., 192.168.1.2 - 192.168.1.254
-/snap/bin/microk8s.enable metallb ingress
+/snap/bin/microk8s.enable metallb ingress dashboard metrics-server
 
 # set up kubectl
 mkdir -p ~/.kube
@@ -40,3 +40,6 @@ sudo snap install kubectx --classic
 # test things out; e.g.,
 kubectl get nodes
 kubectl get pods -owide -A
+
+# NB to access the dashboard: https://microk8s.io/docs/addon-dashboard
+# kubectl describe secret -n kube-system microk8s-dashboard-token

@@ -15,14 +15,14 @@ sudo reboot
 sudo snap install core && sudo reboot
 
 # install microk8s and add yourself to the group
-sudo snap install microk8s --classic && sudo usermod -a -G microk8s cliff
+sudo snap install microk8s --classic && sudo usermod -a -G microk8s cliff && sudo reboot
 
 # check status
-microk8s status
+/snap/bin/microk8s.status --format short
 
 # on pi0, do this and then run the command it spits out on the new node
 # NOTE: USE THE --worker OPTION!
-microk8s.add-node
+/snap/bin/microk8s.add-node
 
 # check nodes
-microk8s.kubectl get node
+/snap/bin/microk8s.kubectl get node

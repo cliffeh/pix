@@ -1,2 +1,0 @@
-# sync two filesystems
-sudo rsync -axHAWXS --numeric-ids --delete --info=progress2 SOURCE/ TARGET/

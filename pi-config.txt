@@ -11,8 +11,8 @@ sudo cp /boot/firmware/cmdline.txt /boot/firmware/cmdline.txt.orig
 cat /boot/firmware/cmdline.txt
 sudo reboot
 
-# snapd core runtime
-sudo snap install core
+# snapd core runtime; reboot
+sudo snap install core && sudo reboot
 
 # install microk8s and add yourself to the group
 sudo snap install microk8s --classic && sudo usermod -a -G microk8s cliff
